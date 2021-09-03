@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  php:
+    container_name: php
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/var/www/norrahorse
+    ports:
+      - 9000:9000
+    depends_on: 
+      - db
+    restart: on-failure
+  db:
+    container_name: db
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "norrahorse"
+    ports:
+      - 4306:3306
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/var/www/norrahorse
+    ports:
+      - 8000:80
